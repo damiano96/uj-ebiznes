@@ -22,25 +22,21 @@ class CategoryController @Inject()(cc: ControllerComponents) extends AbstractCon
 
   def createCategory: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val body = request.body.asJson.get
-    val category = body.as[models.Category]
+
+    val id = data.Categories.categoriesList.lastOption match {
+      case Some(c) => c.id + 1
+      case None => 1
+    }
+    val name = (body \ "name").as[String]
+
+    val category = new models.Category(id, name)
+
     val categoryIndex = data.Categories.categoriesList.indexWhere(_.name == category.name)
     if (categoryIndex == -1) {
-      val lastIndex = data.Categories.categoriesList.last.id
-      category.id = lastIndex + 1
       data.Categories.categoriesList += category
       Ok(Json.toJson(category))
     } else {
       BadRequest
-    }
-  }
-
-  def deleteCategory(id: Long): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val categoryIndex = data.Categories.categoriesList.indexWhere(_.id == id)
-    if (categoryIndex == -1) {
-      NotFound
-    } else {
-      data.Categories.categoriesList.remove(categoryIndex)
-      Ok
     }
   }
 
@@ -53,6 +49,17 @@ class CategoryController @Inject()(cc: ControllerComponents) extends AbstractCon
     } else {
       data.Categories.categoriesList(categoryIndex) = category
       Ok(Json.toJson(category))
+    }
+  }
+
+  def deleteCategory(name: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    val categoryIndex = data.Categories.categoriesList.indexWhere(_.name == name)
+    if (categoryIndex == -1) {
+      NotFound
+    } else {
+      data.Categories.categoriesList.remove(categoryIndex)
+      data.Products.productsList = data.Products.productsList.filterNot(_.category.name == name)
+      Ok
     }
   }
 }

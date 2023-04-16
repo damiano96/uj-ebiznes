@@ -14,7 +14,9 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def addProductToCart: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val body = request.body.asJson.get
+
     val productId = (body \ "id").as[Long]
+
     val product = data.Products.productsList.find(_.id == productId)
     product match {
       case Some(p) =>
@@ -35,8 +37,10 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def updateProductInCart: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val body = request.body.asJson.get
+
     val productId = (body \ "id").as[Long]
     val quantity = (body \ "quantity").as[Int]
+
     val product = data.Products.productsList.find(_.id == productId)
     product match {
       case Some(p) =>
@@ -60,6 +64,14 @@ class CartController @Inject()(cc: ControllerComponents) extends AbstractControl
   def clearCart: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     data.CartProducts.cart.clear()
     Ok
+  }
+
+  def getProductFromCart(id: Long): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    val cartProduct = data.CartProducts.cart.find(_.id == id)
+    cartProduct match {
+      case Some(cp) => Ok(Json.toJson(cp))
+      case None => NotFound
+    }
   }
 
 

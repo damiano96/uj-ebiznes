@@ -22,23 +22,11 @@ func setCategoriesRoutes(e *echo.Echo) {
 	e.PUT("/categories/:id", controllers.UpdateCategory)
 }
 
-//func setCartRoutes(e *echo.Echo) {
-//	e.GET("/cart", func(c echo.Context) error {
-//		return c.JSON(http.StatusOK, controllers.GetCart())
-//	})
-//
-//	e.POST("/cart", func(c echo.Context) error {
-//		return c.JSON(http.StatusOK, controllers.CreateCartItem(c))
-//	})
-//
-//	e.DELETE("/cart/:id", func(c echo.Context) error {
-//		return c.JSON(http.StatusOK, controllers.DeleteCartItem(c.Param("id")))
-//	})
-//
-//	e.PUT("/cart/:id", func(c echo.Context) error {
-//		return c.JSON(http.StatusOK, controllers.UpdateCartItem(c))
-//	})
-//}
+func setCartRoutes(e *echo.Echo) {
+	e.GET("/cart", controllers.GetCart)
+	e.POST("/cart", controllers.AddProductToCart)
+	e.DELETE("/cart/:productID", controllers.RemoveProductFromCart)
+}
 
 func setRoutes(e *echo.Echo) {
 	e.GET("/", func(c echo.Context) error {
@@ -47,5 +35,5 @@ func setRoutes(e *echo.Echo) {
 
 	setProductsRoutes(e)
 	setCategoriesRoutes(e)
-	//setCartRoutes(e)
+	setCartRoutes(e)
 }

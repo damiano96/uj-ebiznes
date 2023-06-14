@@ -25,7 +25,9 @@ func setCategoriesRoutes(e *echo.Echo) {
 func setCartRoutes(e *echo.Echo) {
 	e.GET("/cart", controllers.GetCart)
 	e.POST("/cart", controllers.AddProductToCart)
+	e.PUT("/cart", controllers.UpdateCartItem)
 	e.DELETE("/cart/:productID", controllers.RemoveProductFromCart)
+	e.DELETE("/cart", controllers.ClearCart)
 }
 
 func setRoutes(e *echo.Echo) {

@@ -5,6 +5,7 @@ import (
 	"excercise-4-go/models"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"strconv"
 )
 
 func GetCart(c echo.Context) error {
@@ -55,28 +56,60 @@ func AddProductToCart(c echo.Context) error {
 func RemoveProductFromCart(c echo.Context) error {
 	var db = database.GetDB()
 	var cart models.Cart
-	var product models.Product
+	var productID, err = strconv.Atoi(c.Param("productID"))
 
-	db.First(&product, c.Param("productID"))
+	db.Find(&cart, "product_id = ?", productID)
 
-	if product.ID == 0 {
-		return c.JSON(http.StatusNotFound, "Product not found")
+	if err != nil {
+		return c.JSON(http.StatusNotFound, "Product not found in cart")
 	}
-
-	db.Preload("Product").
-		Preload("Product.Category").
-		Find(&cart, "product_id = ?", product.ID)
 
 	if cart.ID == 0 {
 		return c.JSON(http.StatusNotFound, "Product not found in cart")
-	} else {
-		cart.Quantity -= 1
-		db.Save(&cart)
+	}
+
+	db.Delete(&cart)
+
+	return c.JSON(http.StatusOK, "Product removed from cart")
+}
+
+func UpdateCartItem(c echo.Context) error {
+	var db = database.GetDB()
+	var cart models.Cart
+	var cart2 models.Cart
+
+	err := c.Bind(&cart)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, "Cart item not found")
+	}
+
+	db.Find(&cart2, "product_id = ?", cart.ProductID)
+
+	if cart2.ID == 0 {
+		return c.JSON(http.StatusNotFound, "Product not found in cart")
 	}
 
 	if cart.Quantity == 0 {
-		db.Delete(&cart)
+		db.Delete(&cart2)
+	} else {
+		cart2.Quantity = cart.Quantity
+		db.Save(&cart2)
 	}
 
-	return c.JSON(http.StatusOK, cart)
+	return c.JSON(http.StatusOK, "Cart item updated")
+}
+
+func ClearCart(c echo.Context) error {
+	var db = database.GetDB()
+	var carts []models.Cart
+
+	db.Find(&carts)
+
+	if len(carts) == 0 {
+		return c.JSON(http.StatusNotFound, "Cart is empty")
+	}
+
+	db.Delete(&carts)
+
+	return c.JSON(http.StatusOK, "Cart cleared")
 }

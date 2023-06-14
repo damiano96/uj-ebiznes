@@ -18,6 +18,10 @@ func setCartRoutes(e *echo.Echo) {
 	e.DELETE("/cart", controllers.ClearCart)
 }
 
+func setPaymentRoutes(e *echo.Echo) {
+	e.POST("/payment", controllers.MakePayment)
+}
+
 func setRoutes(e *echo.Echo) {
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello API!")
@@ -25,4 +29,5 @@ func setRoutes(e *echo.Echo) {
 
 	setProductsRoutes(e)
 	setCartRoutes(e)
+	setPaymentRoutes(e)
 }

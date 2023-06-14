@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CartContext } from "./CartContext";
-import {addToCart, getCart, removeFromCart, updateCart} from "../../services/apiCalls";
+import {addToCart, clearCart, getCart, removeFromCart, updateCart} from "../../services/apiCalls";
 import {ICart} from "../../interfaces/ICart";
 import {IProduct} from "../../interfaces/IProduct";
 
@@ -10,6 +10,12 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
     React.useEffect(() => {
         getCart().then(data => setShopCart(data));
     }, []);
+
+    const getShopCartPrice = (): number => {
+        return shopCart?.reduce((previousValue, currentValue) => {
+            return previousValue + (currentValue.Quantity * currentValue.Product.Price)
+        }, 0) || 0;
+    }
 
     const addProductToCart = (product: IProduct): void => {
         const actualShopCart: ICart[] = [...shopCart];
@@ -27,7 +33,7 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
     }
 
     const clearShopCart = (): void => {
-        shopCart.length = 0;
+        clearCart().then(r => setShopCart([]));
     }
 
     const increaseCountOfItem = (idProduct: number): void => {
@@ -70,7 +76,8 @@ export const CartProvider = ({children}: {children: React.ReactNode}) => {
              clearShopCart,
              increaseCountOfItem,
              reduceCountOfItem,
-             removeItemFromCart
+             removeItemFromCart,
+             getShopCartPrice
          }}>
              {children}
          </CartContext.Provider>

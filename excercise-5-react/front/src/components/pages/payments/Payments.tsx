@@ -1,7 +1,63 @@
 import React from "react";
+import {makePayment} from "../../../services/apiCalls";
+import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {useCart} from "../../../context/hooks/useCart";
+import {useNavigate} from "react-router-dom";
 
 export const Payments = (): React.JSX.Element => {
+    const {getShopCartPrice, clearShopCart} = useCart();
+    const navigate = useNavigate();
+    const [creditCard, setCreditCart] = React.useState<string>('');
+
+    const onHandleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        event.preventDefault();
+
+        const creditCardNumber = Number(creditCard);
+        await makePayment({
+            Price: getShopCartPrice(),
+            CreditCardNumber: creditCardNumber
+        });
+
+        clearShopCart();
+
+        alert('Zamówienie zostało złożone');
+        navigate('/');
+    }
+
     return (
-        <h1>Payments</h1>
+        <Container>
+            <Row style={{marginBottom: '40px'}}>
+                <span className={'display-6'}>Płatności</span>
+            </Row>
+            <Row>
+                <Form onSubmit={onHandleSubmit}>
+                    <Row className="mb-3">
+                        <Form.Group as={Col} controlId="creditCardNumber">
+                            <Form.Label>Numer karty kredytowej</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                placeholder="1234 5678 1234 5678"
+                                value={creditCard}
+                                onChange={(event) => {
+                                    const value = (event.target as HTMLInputElement)
+                                        .value
+                                        .replaceAll(' ', '');
+
+                                    setCreditCart(value);
+                                }}
+                            />
+                        </Form.Group>
+                    </Row>
+                    <Row className={'mt-4 mb-4'}>
+                        <Col>
+                            <h5>Kwota do zapłaty: </h5>
+                            <h6>{getShopCartPrice()}</h6>
+                        </Col>
+                    </Row>
+                    <Button type={'submit'}>Zapłać</Button>
+                </Form>
+            </Row>
+        </Container>
     )
 }

@@ -20,6 +20,7 @@ export const Cart = (): React.JSX.Element => {
                               <tr>
                                   <th>Produkt</th>
                                   <th>Liczba</th>
+                                  <th>Cena sztuka</th>
                                   <th>Cena</th>
                                   <th>Akcja</th>
                               </tr>

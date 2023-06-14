@@ -4,13 +4,7 @@ import {useCart} from "../../../context/hooks/useCart";
 import {Link} from "react-router-dom";
 
 export const CartSummary = (): React.JSX.Element => {
-    const {shopCart} = useCart();
-
-    const getShopCartPrice = (): number => {
-        return shopCart?.reduce((previousValue, currentValue) => {
-            return previousValue + (currentValue.Quantity * currentValue.Product.Price)
-        }, 0) || 0;
-    }
+    const {getShopCartPrice} = useCart();
 
     return (
          <Row style={{marginTop: '30px'}}>

@@ -37,6 +37,9 @@ export const CartProduct = (props: ICart) => {
                  </Container>
              </td>
              <td>
+                 {props.Product.Price}
+             </td>
+             <td>
                  {getCurrentProductPrice()}
              </td>
              <td>

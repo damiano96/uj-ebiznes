@@ -1,5 +1,6 @@
 import axios from "axios";
 import {ICart} from "../interfaces/ICart";
+import {IPayment} from "../interfaces/IPayment";
 
 const API_URL = "http://localhost:1323";
 
@@ -13,9 +14,9 @@ export const getProducts = async (): Promise<any[]> => {
   }
 }
 
-export const makePayment = async (data: any): Promise<any> => {
+export const makePayment = async (data: IPayment): Promise<any> => {
   try {
-    const response = await axios.post(API_URL + '/payment', data);
+    const response = await axios.post(API_URL + '/payment', {...data});
     return response.data;
   } catch (error) {
     throw error
@@ -52,6 +53,15 @@ export const removeFromCart = async (productID: number): Promise<any> => {
 export const updateCart = async (cartItem: ICart): Promise<any> => {
     try {
         const response = await axios.put(API_URL + "/cart", {...cartItem});
+        return response.data;
+    } catch (error) {
+        throw error
+    }
+}
+
+export const clearCart = async (): Promise<any> => {
+    try {
+        const response = await axios.delete(API_URL + "/cart");
         return response.data;
     } catch (error) {
         throw error

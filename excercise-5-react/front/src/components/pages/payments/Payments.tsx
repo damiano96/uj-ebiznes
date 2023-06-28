@@ -52,7 +52,7 @@ export const Payments = (): React.JSX.Element => {
                     <Row className={'mt-4 mb-4'}>
                         <Col>
                             <h5>Kwota do zapłaty: </h5>
-                            <h6>{getShopCartPrice()}</h6>
+                            <h6 data-testid={'price'}>{getShopCartPrice()}</h6>
                         </Col>
                     </Row>
                     <Button type={'submit'}>Zapłać</Button>

@@ -47,7 +47,8 @@ export const CartProduct = (props: ICart) => {
                       variant={'danger'}
                       onClick={() => {
                           removeItemFromCart(props.ID)
-                      }}>
+                      }}
+                      data-testid="trash-button">
                      <BsTrashFill/>
                  </Button>
              </td>

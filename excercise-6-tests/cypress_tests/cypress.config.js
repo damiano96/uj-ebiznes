@@ -7,6 +7,7 @@ module.exports = defineConfig({
       
     },
     experimentalCspAllowList: true,
-    experimentalWebKitSupport: true
+    experimentalWebKitSupport: true,
+    chromeWebSecurity: false
   },
 });

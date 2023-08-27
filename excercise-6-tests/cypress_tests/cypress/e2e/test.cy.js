@@ -43,14 +43,16 @@ describe('www.morele.net tests',
 
             cy.visit(`${website}`);
             cy.get('input.quick-search-autocomplete').eq(0).type(searchTerm);
+            cy.wait(1000);
+
             cy.get('button.h-quick-search-submit').eq(0).click();
-            cy.wait(8000);
+            cy.wait(7000);
             cy.url().should('include', '/wyszukiwarka');
             cy.get('.cat-product').should('have.length.above', 0);
         });
 
         it('test8: dodanie do koszyka', () => {
-            cy.visit(`${website}/laptop-lenovo-v15-g2-itl-i5-1135g7-8-gb-256-gb-w11-82kb019dpb-12368069/`);
+            cy.visit(`${website}/laptop-asus-vivobook-pro-oled-15-d6500-ryzen-5-5600h-16-gb-512-gb-w11-rtx-3050-d6500qc-l1132w-12894052/`);
 
             const productBoxMain = cy.get('div.product-box-main');
             const addToCartContainer = productBoxMain.get('div.add-to-cart');
@@ -71,7 +73,7 @@ describe('www.morele.net tests',
         })
 
         it('test9: dodanie do koszyka czterech przedmiotów', () => {
-            cy.visit(`${website}/laptop-gigabyte-aorus-5-ke4-i7-12700h-16-gb-1-tb-w11-rtx-3060-240-hz-ke4-72uk314so-12971754/`);
+            cy.visit(`${website}/laptop-asus-vivobook-pro-oled-15-d6500-ryzen-5-5600h-16-gb-512-gb-w11-rtx-3050-d6500qc-l1132w-12894052/`);
 
             const productBoxMain = cy.get('div.product-box-main');
             const addToCartContainer = productBoxMain.get('div.add-to-cart');
@@ -106,9 +108,9 @@ describe('www.morele.net tests',
             const searchTerm = 'ewdedwedwe';
 
             cy.visit(`${website}`);
-          cy.wait(2000);
-          const search = cy.get('input.quick-search-autocomplete').eq(0);
-          search.type(searchTerm);
+            cy.wait(2000);
+            const search = cy.get('input.quick-search-autocomplete').eq(0);
+            search.type(searchTerm);
             cy.wait(4000);
             cy.get('button.h-quick-search-submit').eq(0).click({force: true});
             cy.contains('Brak wyników :(').should('be.visible');
@@ -167,8 +169,59 @@ describe('www.morele.net tests',
             cy.get('.basket-box-items .item-container').should('have.length.above', 0);
         })
 
+        it('test16 powinien sprawdzic poprawnosc emaila podczas logowania', () => {
+            cy.visit(`${website}/login`);
 
-        function numberWithSpaces(x) {
+            const loginContainer = cy.get('div#login-container');
+            const emailInput = loginContainer.find('input#username');
+
+            emailInput.type('test');
+            loginContainer.get('form#login_form').find('button').click();
+
+            loginContainer.get('div.form-control-error').should('be.visible');
+        })
+
+        it('test17 powinien sprawdzic dane logowania - nieprawdlowe dane', () => {
+            cy.visit(`${website}/login`);
+            const loginContainer = cy.get('div#login-container');
+
+            loginContainer.get('input#username').type('test@o2.pl');
+            loginContainer.get('input#password-log').type('test');
+            cy.wait(1000);
+
+            loginContainer.get('form#login_form').find('button').click();
+
+            cy.wait(1000);
+
+            cy.get('div.morele-notify-container')
+                .get('div.mn-item')
+                .get('div.mn-body-wr')
+                .get('div.mn-body')
+                .should('be.visible');
+        })
+
+        it('test18 sprawdzenie czy jest przycisk do logowania przez facebooka', () => {
+            cy.visit(`${website}/login`);
+            const socials = cy.get('div.social-login-strip');
+
+            socials.get('a#facebook-login').should('be.visible');
+        })
+
+        it('test19 sprawdzenie czy jest przycisk do logowania przez google', () => {
+            cy.visit(`${website}/login`);
+            const socials = cy.get('div.social-login-strip');
+
+            socials.get('a#google-login').should('be.visible');
+        });
+
+        it('test20 sprawdzenie czy jest przycisk do logowania przez konto apple', () => {
+            cy.visit(`${website}/login`);
+            const socials = cy.get('div.social-login-strip');
+
+            socials.get('a#apple-login').should('be.visible');
+        });
+
+            function numberWithSpaces(x) {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
 

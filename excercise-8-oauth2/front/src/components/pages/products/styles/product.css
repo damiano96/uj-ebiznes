@@ -1,0 +1,11 @@
+.card-footer {
+    background: #F4F5FA;
+    border: none;
+    display: flex;
+    justify-content: flex-end;
+}
+.button {
+    border: none;
+    border-radius: 0;
+    margin-right: 1px;
+}

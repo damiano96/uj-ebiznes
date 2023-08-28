@@ -1,0 +1,25 @@
+.navbar-container {
+    min-height: 54px;
+    box-shadow: 0 1px 13px -7px rgba(66, 68, 90, 1);
+    background: #1F1F26;
+    color: #FFFFFF;
+    width: 100%;
+}
+
+.navbar-container .btn {
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 54px;
+    border: none;
+    border-radius: 0;
+}
+
+.navbar-container .btn.active {
+    background: #4369D9;
+}
+
+.navbar-container .btn:hover {
+    background: #4369D9;
+}

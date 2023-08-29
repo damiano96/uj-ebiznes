@@ -50,3 +50,7 @@
 .oauth-button:hover .service-name {
     color: #FFFFFF;
 }
+
+.invalid-form input {
+    border: 1px solid red;
+}

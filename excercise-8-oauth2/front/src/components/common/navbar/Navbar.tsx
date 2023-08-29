@@ -4,9 +4,11 @@ import {BsCart} from "react-icons/bs";
 import {Link} from "react-router-dom";
 import './style.css';
 import {useCart} from "../../../context/hooks/useCart";
+import useAuth from "../../../context/hooks/useAuth";
 
 export const Navbar = (): React.JSX.Element => {
     const {shopCart} = useCart();
+    const {onLogout} = useAuth();
 
     const getNumberOfProductsInCart = (): number => {
         return shopCart?.reduce((previousValue, currentValue) => {
@@ -20,7 +22,7 @@ export const Navbar = (): React.JSX.Element => {
                 <Col className={'left-side-nav'}>
                     <Link to={'/'} className={`btn`}>Sklep</Link>
                 </Col>
-                <Col>
+                <Col lg={2}>
                     <Link to={'/cart'} className={`btn`}>
                         <Container>
                             <Row>
@@ -33,6 +35,9 @@ export const Navbar = (): React.JSX.Element => {
                             </Row>
                         </Container>
                     </Link>
+                </Col>
+                <Col lg={1} className={'left-side-nav'}>
+                    <span onClick={() => onLogout()} className={`btn`}>Wyloguj</span>
                 </Col>
             </Row>
         </Container>

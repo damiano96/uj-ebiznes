@@ -7,23 +7,42 @@ export const AuthProvider = ({children}: any) => {
     const navigate = useNavigate();
     const [user, setUser] = useState<IUser | null>(null);
 
+    const getUserFromStorage = (): IUser|null => {
+        const userFromStorage = sessionStorage.getItem('user_shop');
+
+        if ( !!userFromStorage ) {
+            const userFromStorageParsed = JSON.parse(userFromStorage);
+            const {email, token} = userFromStorageParsed;
+
+            return {email, token} as IUser;
+        }
+
+        return null;
+    }
+
+    const getDefaultUser = (): IUser | null => {
+        return user === null
+            ? getUserFromStorage()
+            : user;
+    }
+
     const handleLogin = async (userObject: IUser) => {
         const {email, token} = userObject;
 
         setUser({email, token} as IUser);
-        localStorage.setItem('user_shop', JSON.stringify(userObject));
+        sessionStorage.setItem('user_shop', JSON.stringify(userObject));
         navigate('/');
     }
 
     const handleLogout = async () => {
         setUser(null);
-        localStorage.removeItem('user_shop');
+        sessionStorage.removeItem('user_shop');
         navigate('/login');
     }
 
     return (
         <AuthContext.Provider value={{
-            user: user,
+            user: getDefaultUser(),
             onLogin: handleLogin,
             onLogout: handleLogout
         }}>

@@ -28,16 +28,16 @@ func LoginUser(c echo.Context) error {
 
 	var err = c.Bind(&user)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, "Invalid data")
+		return c.JSON(http.StatusBadRequest, "Nieprawidłowe dane logowania")
 	}
 
 	db.Find(&validUser, "email = ?", user.Email)
 	if validUser.ID == 0 {
-		return c.JSON(http.StatusNotFound, "User does not exist")
+		return c.JSON(http.StatusNotFound, "Nieprawidłowe dane logowania")
 	}
 
 	if validUser.Password != user.Password {
-		return c.JSON(http.StatusNotFound, "Invalid password")
+		return c.JSON(http.StatusNotFound, "Nieprawidłowe dane logowania")
 	}
 
 	token, err := generateToken(validUser.Email)
@@ -54,18 +54,21 @@ func LoginUser(c echo.Context) error {
 func RegisterUser(c echo.Context) error {
 	var db = database.GetDB()
 	var user models.User
+	var newUser models.User
 
 	err := c.Bind(&user)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, "Invalid data")
+		return c.JSON(http.StatusBadRequest, "Nieprawidłowe dane")
 	}
 
-	db.Find(&user)
-	if user.ID != 0 {
-		return c.JSON(http.StatusBadRequest, "User already exists")
+	db.Find(&newUser, "email = ?", user.Email)
+	if newUser.ID != 0 {
+		return c.JSON(http.StatusBadRequest, "Użytkownik już istnieje")
 	}
 
 	db.Create(&user)
 
-	return c.JSON(http.StatusOK, "User created")
+	return c.JSON(http.StatusOK, map[string]string{
+		"message": "Utworzono uzytkownika",
+	})
 }

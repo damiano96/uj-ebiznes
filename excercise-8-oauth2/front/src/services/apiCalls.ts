@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {ICart} from "../interfaces/ICart";
 import {IPayment} from "../interfaces/IPayment";
 
@@ -91,6 +91,16 @@ export const clearCart = async (jwtCode: string): Promise<any> => {
 export const doLogin = async (email: string, password: string): Promise<any> => {
     try {
         const response = await axios.post(API_URL + "/login", {email: email, password: password});
+        return response.data;
+    } catch (error) {
+        console.warn(error);
+        throw error
+    }
+}
+
+export const doRegister = async (email: string, password: string): Promise<any> => {
+    try {
+        const response = await axios.post(API_URL + "/register", {email: email, password: password});
         return response.data;
     } catch (error) {
         console.warn(error);

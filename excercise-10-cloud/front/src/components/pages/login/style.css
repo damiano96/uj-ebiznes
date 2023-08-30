@@ -1,0 +1,56 @@
+.login-page {
+    background: #2980B9;
+}
+.login-container {
+    width: 40% !important;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+}
+.login-content {
+    padding: 30px 0 30px 0;
+    align-items: center;
+}
+.login-content-body {
+    width: 80%;
+}
+.login-content-body a {
+    color: #0D0D0D;
+    text-decoration: none;
+}
+.login-content-body a:hover {
+    text-decoration: underline;
+}
+.login-button {
+    width: 100%;
+}
+
+.oauth-panel {
+    width: 100%;
+}
+
+.oauth-button {
+    width: 40% !important;
+    padding: 20px !important;
+    font-size: 20px !important;
+    font-weight: lighter !important;
+}
+
+.oauth-button .row .col {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.oauth-button .service-name {
+    color: #0D0D0D;
+}
+
+.oauth-button:hover .service-name {
+    color: #FFFFFF;
+}
+
+.invalid-form input {
+    border: 1px solid red;
+}

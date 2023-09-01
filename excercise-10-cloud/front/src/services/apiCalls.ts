@@ -2,7 +2,7 @@ import axios, {AxiosError} from "axios";
 import {ICart} from "../interfaces/ICart";
 import {IPayment} from "../interfaces/IPayment";
 
-const API_URL = "http://localhost:1323";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const getProducts = async (jwtCode: string): Promise<any[]> => {
     try {
